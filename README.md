@@ -19,6 +19,6 @@ cd AlexandreForet_7_08102021
 npm i && npm run start
 ```
 
-## Import .env file at the root of the project (available in the folder sent)
+## Import .env and config.json files at the root of the project (available in the folder sent)
 
 ## [Front-end](https://github.com/OpenClassrooms-Student-Center/dwj-projet6)

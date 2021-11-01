@@ -26,19 +26,12 @@ module.exports = function(sequelize, DataTypes) {
     photo: {
       type: DataTypes.STRING(255),
       allowNull: false
-    },
-    date_created: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    date_updated: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   }, {
     sequelize,
     tableName: 'employee',
-    timestamps: false,
+    timestamps: true,
+    underscored: true,
     indexes: [
       {
         name: "PRIMARY",

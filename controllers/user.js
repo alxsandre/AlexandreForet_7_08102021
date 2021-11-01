@@ -35,13 +35,13 @@ exports.login = async (req, res) => {
             }
           });
         if (!user) {
-            res.status(status.UNAUTHORIZED).json({ error: 'Utilisateur non trouvé!'});
+            return res.status(status.UNAUTHORIZED).json({ error: 'Utilisateur non trouvé!'});
         }
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) {
             return res.status(status.UNAUTHORIZED).json({ error: 'mot de passe incorrect!'});
         } 
-        res.status(status.OK).json({
+        return res.status(status.OK).json({
             userId: user.id,
             token: jwt.sign(
                 { userId: user.id },

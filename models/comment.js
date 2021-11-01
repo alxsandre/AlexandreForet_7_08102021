@@ -26,19 +26,12 @@ module.exports = function(sequelize, DataTypes) {
     content: {
       type: DataTypes.TEXT,
       allowNull: false
-    },
-    date_created: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    date_updated: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   }, {
     sequelize,
     tableName: 'comment',
-    timestamps: false,
+    timestamps: true,
+    underscored: true,
     indexes: [
       {
         name: "PRIMARY",

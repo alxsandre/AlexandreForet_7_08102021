@@ -3,10 +3,8 @@ const db = require('../models/index');
 const fs = require('fs');
 
 exports.createPost = async (req, res) => {
-  const dateCreated = new Date;
   try { 
     const post = db.post.build({ 
-      date_created: dateCreated,
       ...req.body 
     });
     await post.save();
@@ -17,7 +15,6 @@ exports.createPost = async (req, res) => {
 };
 
 exports.modifyPost = async (req, res) => {
-  const dateCreated = new Date;
   try {
     const post = await db.post.findOne({
       where: {
@@ -25,7 +22,6 @@ exports.modifyPost = async (req, res) => {
       }
     });
     post.content = req.body.content;
-    post.date_updated = dateCreated;
     await post.save();
     return res.status(status.OK).json({ message: 'Objet modifié!'})
   } catch (error) {
@@ -48,10 +44,29 @@ exports.getOnePost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   try { 
-    const posts = await db.post.findAll();
+    db.post.belongsTo(db.employee, {foreignKey: 'employee_id'});
+    const posts = await db.post.findAll({
+      include: {
+        model: db.employee
+      }
+    });
     return res.status(status.OK).json(posts);
   } catch (error) {
     return res.status(status.BAD_REQUEST).json({ error });
+  }
+};
+
+exports.deletePost = async (req, res) => {
+  try {
+    const post = await db.post.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+    await post.destroy();
+    return res.status(status.OK).json({ message: 'Objet supprimé !' });
+  } catch (error) {
+    return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
   }
 };
 /*
@@ -100,53 +115,4 @@ exports.modifyLike = async (req, res, next) => {
   };
 };
 
-exports.modifySauce = async (req, res, next) => {
-    try {
-      if (req.file) {
-        const sauceObject = {...JSON.parse(req.body.sauce), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`};
-        const sauce =  await Sauce.findOne({ _id: req.params.id })
-        const filename = sauce.imageUrl.split('/images/')[1];
-        fs.unlink(`images/${filename}`, async () => {
-          await Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id})
-          return res.status(status.OK).json({ message: 'Objet modifié!'})
-        });
-      } else {
-        await Sauce.updateOne({ _id: req.params.id }, { ...req.body , _id: req.params.id})
-        return res.status(status.OK).json({ message: 'Objet modifié!'})
-      }
-    } catch (error) {
-      return res.status(status.NOT_FOUND).json({ error });
-    };
-  };
-
-exports.deleteSauce = async (req, res, next) => {
-  try {
-    const sauce =  await Sauce.findOne({ _id: req.params.id })
-    const filename = sauce.imageUrl.split('/images/')[1];
-    fs.unlink(`images/${filename}`, async () => {
-      await Sauce.deleteOne({ _id: req.params.id });
-      return res.status(status.OK).json({ message: 'Objet supprimé !' });
-    });
-  } catch (error) {
-    return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
-  }
-};
-
-exports.getOneSauce = async (req, res, next) => {
-  try {
-    const sauce = await Sauce.findOne({ _id: req.params.id })
-    return res.status(status.OK).json(sauce);
-  } catch (error) {
-    return res.status(status.NOT_FOUND).json({ error })
-  }
-};
-
-exports.getAllSauces = async (req, res, next) => {
-  try { 
-    const sauces = await Sauce.find();
-    return res.status(status.OK).json(sauces);
-  } catch (error) {
-    return res.status(status.BAD_REQUEST).json({ error });
-  }
-};
 */

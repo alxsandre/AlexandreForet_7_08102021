@@ -44,4 +44,7 @@ app.use('/api/auth', userRoutes);
 const postRoutes = require('./routes/post');
 app.use('/api/post', postRoutes);
 
+const commentRoutes = require('./routes/comment');
+app.use('/api/comment', commentRoutes);
+
 module.exports = app;
