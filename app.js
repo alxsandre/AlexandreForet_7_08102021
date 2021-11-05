@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
 require('dotenv').config();
 
@@ -38,6 +39,8 @@ app.use(express.urlencoded({
 extended: true
 }));
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 const userRoutes = require('./routes/user');
 app.use('/api/auth', userRoutes);
 
@@ -46,5 +49,8 @@ app.use('/api/post', postRoutes);
 
 const commentRoutes = require('./routes/comment');
 app.use('/api/comment', commentRoutes);
+
+const likeRoutes = require('./routes/like');
+app.use('/api/like', likeRoutes);
 
 module.exports = app;

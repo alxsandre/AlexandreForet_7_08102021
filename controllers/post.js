@@ -1,6 +1,7 @@
 const status  = require('http-status');
 const db = require('../models/index');
-const fs = require('fs');
+const { getAllComments } = require('./comment');
+const { sequelize } = require('sequelize');
 
 exports.createPost = async (req, res) => {
   try { 
@@ -43,11 +44,12 @@ exports.getOnePost = async (req, res) => {
 };
 
 exports.getAllPosts = async (req, res) => {
-  try { 
+  try {
     db.post.belongsTo(db.employee, {foreignKey: 'employee_id'});
     const posts = await db.post.findAll({
       include: {
-        model: db.employee
+        model: db.employee,
+        attributes: ['last_name', 'first_name', 'photo']
       }
     });
     return res.status(status.OK).json(posts);
@@ -58,61 +60,70 @@ exports.getAllPosts = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    const post = await db.post.findOne({
+    const comment = await db.comment.findOne({
       where: {
-        id: req.params.id
+        post_id: req.params.id,
       }
     });
-    await post.destroy();
-    return res.status(status.OK).json({ message: 'Objet supprimé !' });
+    const post = await db.comment.findOne({
+      where: {
+        id: req.params.id,
+      }
+    });
+    if (comment) {
+      await db.comment.destroy({
+        where: {
+          post_id: req.params.id,
+        }
+      });
+      await db.post.destroy({
+        where: {
+          id: req.params.id,
+        }
+      });
+      return res.status(status.OK).json({ message: 'post et ses commentaires supprimés !' });
+    } else if (post) {
+      await db.post.destroy({
+        where: {
+          id: req.params.id,
+        }
+      });
+      return res.status(status.OK).json({ message: 'post supprimé!' });
+    } else {
+      return res.status(status.OK).json({ message: 'post déjà supprimé!' });
+    }
+   
+    /*
+    db.post.hasMany(db.comment);
+    db.comment.belongsTo(db.post);
+    const post = await db.post.findAll({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        model: db.comment,
+        where: {
+          post_id: req.params.id
+        }
+      },
+      raw: true,
+      nest: true
+    });
+    */
+    /*
+    if (post.comments) {
+      const comments = await db.comment.findAll({
+        where: {
+          post_id: req.params.id,
+        }
+      });
+      return res.status(status.OK).json(comments);
+    }
+    */
+    //await post.destroy();
+    //return res.status(status.OK).json({ message: 'Objet supprimé !' });
+    //return res.status(status.OK).json(post);
   } catch (error) {
     return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
   }
 };
-/*
-exports.modifyLike = async (req, res, next) => {
-  try {
-    const sauce = await Sauce.findOne({ _id: req.params.id });
-    let likes = sauce.likes;
-    let dislikes = sauce.dislikes;
-    const userId = req.body.userId;
-    let usersLiked = sauce.usersLiked;
-    let usersDisliked = sauce.usersDisliked;
-    const userAlreadyLiked = usersLiked.includes(userId);
-    const userAlreadyDisliked = usersDisliked.includes(userId);
-    if ((req.body.like === 1 && userAlreadyLiked) || (req.body.like === -1 && userAlreadyDisliked)) { 
-      return res.status(status.METHOD_NOT_ALLOWED).json({ message: 'interdit!!!'});
-    }
-    if (req.body.like === 1 && !userAlreadyLiked) {
-      likes++;
-      usersLiked = [...usersLiked, userId];
-      if (userAlreadyDisliked) {
-        dislikes--;
-        usersDisliked = usersDisliked.filter(usersId => usersId !== userId);
-      }
-    } else if (!req.body.like) {
-      if (userAlreadyLiked) {
-        likes--;
-        usersLiked = usersLiked.filter(usersId => usersId !== userId);
-      } else if (userAlreadyDisliked) {
-        dislikes--;
-        usersDisliked = usersDisliked.filter(usersId => usersId !== userId);
-      } else {
-        return res.status(status.METHOD_NOT_ALLOWED).json({ message: 'interdit!!!'});
-      }
-    } else if (req.body.like === -1 && !userAlreadyDisliked) {
-        dislikes++;
-        usersDisliked = [...usersDisliked, userId];
-        if (userAlreadyLiked) {
-          likes--;
-          usersLiked = usersLiked.filter(usersId => usersId !== userId);
-        }
-    };
-    await Sauce.updateOne({ _id: req.params.id }, { likes, dislikes,  usersLiked, usersDisliked, _id: req.params.id})
-    return res.status(status.OK).json({ message: 'Objet modifié!'});
-  } catch (error) {
-    return res.status(status.NOT_FOUND).json({ error });
-  };
-};
-
-*/

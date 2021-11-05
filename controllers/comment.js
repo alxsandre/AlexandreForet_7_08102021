@@ -1,6 +1,5 @@
 const status  = require('http-status');
 const db = require('../models/index');
-const fs = require('fs');
 
 exports.createComment = async (req, res) => {
   try { 
@@ -31,9 +30,14 @@ exports.modifyComment = async (req, res) => {
 
 exports.getAllComments = async (req, res) => {
     try {
+      db.comment.belongsTo(db.employee, {foreignKey: 'employee_id'});
       const comments = await db.comment.findAll({
         where: {
           post_id: req.params.id
+        },
+        include: {
+          model: db.employee,
+          attributes: ['last_name', 'first_name', 'photo']
         }
       });
       return res.status(status.OK).json(comments);
