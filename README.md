@@ -16,9 +16,9 @@ cd AlexandreForet_7_08102021
 
 ## Install Dependencies and Run the Server
 ```shell
-npm i && npm run start
+npm i && npm run dev
 ```
 
-## Import .env and config.json files at the root of the project (available in the folder sent)
+## Import .env and config.js files at the root of the project (available in the folder sent)
 
 ## [Front-end](https://github.com/OpenClassrooms-Student-Center/dwj-projet6)
