@@ -1,6 +1,16 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('comment', {
+  const Comment = comment.init(sequelize, DataTypes);
+  Comment.associate = models => {
+    Comment.belongsTo(models.employee, { foreignKey: "employee_id"});
+    Comment.belongsTo(models.post, { foreignKey: "post_id" });
+  }
+  return Comment
+}
+
+class comment extends Sequelize.Model {
+  static init (sequelize, DataTypes) {
+    super.init({
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -57,4 +67,5 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return comment;
+}}

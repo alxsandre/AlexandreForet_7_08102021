@@ -2,11 +2,11 @@ const status  = require('http-status');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const db = require('../models/index');
+const { models, db } = require('../models/index');
 
 exports.signup = async (req, res) => {
     try {
-        const email = await db.employee.findOne({
+        const email = await models.employee.findOne({
             where: {
               email: req.body.email
             }
@@ -17,7 +17,7 @@ exports.signup = async (req, res) => {
         const hashPassword = await bcrypt.hash(req.body.password, 10);
         const dataEmployee = req.body;
         dataEmployee.password = hashPassword;
-        const employee = db.employee.build({ 
+        const employee = models.employee.build({ 
             ...dataEmployee
         });
         await employee.save();
@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const user = await db.employee.findOne({
+        const user = await models.employee.findOne({
             where: {
               email: req.body.email
             }

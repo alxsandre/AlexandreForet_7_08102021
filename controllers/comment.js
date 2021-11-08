@@ -1,9 +1,9 @@
 const status  = require('http-status');
-const db = require('../models/index');
+const { db, models } = require('../models/index');
 
 exports.createComment = async (req, res) => {
   try { 
-    const comment = db.comment.build({ 
+    const comment = models.comment.build({ 
       ...req.body 
     });
     await comment.save();
@@ -15,7 +15,7 @@ exports.createComment = async (req, res) => {
 
 exports.modifyComment = async (req, res) => {
   try {
-    const comment = await db.comment.findOne({
+    const comment = await models.comment.findOne({
       where: {
         id: req.params.id
       }
@@ -30,13 +30,12 @@ exports.modifyComment = async (req, res) => {
 
 exports.getAllComments = async (req, res) => {
     try {
-      db.comment.belongsTo(db.employee, {foreignKey: 'employee_id'});
-      const comments = await db.comment.findAll({
+      const comments = await models.comment.findAll({
         where: {
           post_id: req.params.id
         },
         include: {
-          model: db.employee,
+          model: models.employee,
           attributes: ['last_name', 'first_name', 'photo']
         }
       });
@@ -48,7 +47,7 @@ exports.getAllComments = async (req, res) => {
 
 exports.deleteComment = async (req, res) => {
     try {
-      const comment = await db.comment.findOne({
+      const comment = await models.comment.findOne({
         where: {
           id: req.params.id
         }

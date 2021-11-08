@@ -1,11 +1,11 @@
 const status  = require('http-status');
-const db = require('../models/index');
+const { models, db} = require('../models/index');
 const { getAllComments } = require('./comment');
 const { sequelize } = require('sequelize');
 
 exports.createPost = async (req, res) => {
   try { 
-    const post = db.post.build({ 
+    const post = models.post.build({ 
       ...req.body 
     });
     await post.save();
@@ -17,7 +17,7 @@ exports.createPost = async (req, res) => {
 
 exports.modifyPost = async (req, res) => {
   try {
-    const post = await db.post.findOne({
+    const post = await models.post.findOne({
       where: {
         id: req.params.id
       }
@@ -32,7 +32,7 @@ exports.modifyPost = async (req, res) => {
 
 exports.getOnePost = async (req, res) => {
   try {
-    const post = await db.post.findOne({
+    const post = await models.post.findOne({
       where: {
         id: req.params.id
       }
@@ -45,12 +45,13 @@ exports.getOnePost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   try {
-    db.post.belongsTo(db.employee, {foreignKey: 'employee_id'});
-    const posts = await db.post.findAll({
-      include: {
-        model: db.employee,
+    const posts = await models.post.findAll({
+      include: [{
+        model: models.employee,
         attributes: ['last_name', 'first_name', 'photo']
-      }
+      }, {
+        model: models.like
+      }]
     });
     return res.status(status.OK).json(posts);
   } catch (error) {
@@ -60,30 +61,43 @@ exports.getAllPosts = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    const comment = await db.comment.findOne({
+    /*
+    await models.post.destroy({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        model: models.comment
+      }
+    });
+    
+    return res.status(status.OK).json({ message: 'post et ses commentaires supprimés !' });
+    */
+
+    const comment = await models.comment.findOne({
       where: {
         post_id: req.params.id,
       }
     });
-    const post = await db.comment.findOne({
+    const post = await models.comment.findOne({
       where: {
         id: req.params.id,
       }
     });
     if (comment) {
-      await db.comment.destroy({
+      await models.comment.destroy({
         where: {
           post_id: req.params.id,
         }
       });
-      await db.post.destroy({
+      await models.post.destroy({
         where: {
           id: req.params.id,
         }
       });
       return res.status(status.OK).json({ message: 'post et ses commentaires supprimés !' });
     } else if (post) {
-      await db.post.destroy({
+      await models.post.destroy({
         where: {
           id: req.params.id,
         }
@@ -92,7 +106,8 @@ exports.deletePost = async (req, res) => {
     } else {
       return res.status(status.OK).json({ message: 'post déjà supprimé!' });
     }
-   
+
+
     /*
     db.post.hasMany(db.comment);
     db.comment.belongsTo(db.post);

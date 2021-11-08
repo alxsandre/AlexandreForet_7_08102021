@@ -1,22 +1,24 @@
 const status  = require('http-status');
-const db = require('../models/index');
+const { db, models } = require('../models/index');
 
 exports.modifyLike = async (req, res) => {
   try {
-    const like = await db.like.findOne({
+    const like = await models.like.findOne({
       where: {
-        employee_id: req.params.userId
+        employee_id: req.params.userId,
+        post_id: req.params.postId
       }
     });
     if (like) {
-      await db.like.destroy({
+      await models.like.destroy({
         where: {
-          employee_id: req.params.userId
+          employee_id: req.params.userId,
+          post_id: req.params.postId
         }
       });
       return res.status(status.OK).json({ message: 'Like supprimé!'});
     } else {
-      const like = db.like.build({ 
+      const like = models.like.build({ 
         employee_id: req.params.userId,
         post_id: req.params.postId
       });

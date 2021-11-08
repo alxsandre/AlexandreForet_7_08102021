@@ -10,16 +10,18 @@ function initModels(sequelize) {
   var like = _like(sequelize, DataTypes);
   var post = _post(sequelize, DataTypes);
 
-  comment.belongsTo(employee, { as: "employee", foreignKey: "employee_id"});
-  employee.hasMany(comment, { as: "comments", foreignKey: "employee_id"});
-  like.belongsTo(employee, { as: "employee", foreignKey: "employee_id"});
-  employee.hasMany(like, { as: "likes", foreignKey: "employee_id"});
-  post.belongsTo(employee, { as: "employee", foreignKey: "employee_id"});
-  employee.hasMany(post, { as: "posts", foreignKey: "employee_id"});
-  comment.belongsTo(post, { as: "post", foreignKey: "post_id"});
-  post.hasMany(comment, { as: "comments", foreignKey: "post_id"});
-  like.belongsTo(post, { as: "post", foreignKey: "post_id"});
-  post.hasMany(like, { as: "likes", foreignKey: "post_id"});
+  //comment.belongsTo(employee, { as: "employee", foreignKey: "employee_id"});
+  //comment.belongsTo(post, { as: "post", foreignKey: "post_id"});
+  //like.belongsTo(post, { as: "post", foreignKey: "post_id"});
+  //like.belongsTo(employee, { as: "employee", foreignKey: "employee_id"});
+  //employee.hasMany(comment, { as: "comments", foreignKey: "employee_id"});
+  //employee.hasMany(like, { as: "likes", foreignKey: "employee_id"});
+  //employee.hasMany(post, { as: "posts", foreignKey: "employee_id"});
+
+  
+  //post.belongsTo(employee, { as: "employee", foreignKey: "employee_id"});
+  //post.hasMany(comment, { as: "comments", foreignKey: "post_id"});
+  //post.hasMany(like, { as: "likes", foreignKey: "post_id"});
 
   return {
     comment,
@@ -28,6 +30,5 @@ function initModels(sequelize) {
     post,
   };
 }
-module.exports = initModels;
-module.exports.initModels = initModels;
-module.exports.default = initModels;
+
+module.exports = { initModels }

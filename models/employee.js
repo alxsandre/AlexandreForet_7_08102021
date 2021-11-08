@@ -1,6 +1,17 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('employee', {
+  const Employee = employee.init(sequelize, DataTypes);
+  Employee.associate = models => {
+    Employee.hasMany(models.comment, { foreignKey: "employee_id"});
+    Employee.hasMany(models.like, { foreignKey: "employee_id"});
+    Employee.hasMany(models.post, { foreignKey: "employee_id"});
+  }
+  return Employee
+}
+
+class employee extends Sequelize.Model {
+  static init (sequelize, DataTypes) {
+    super.init({
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -43,4 +54,5 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return employee;
+}}
