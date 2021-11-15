@@ -53,7 +53,7 @@ exports.deleteComment = async (req, res) => {
         }
       });
       await comment.destroy();
-      return res.status(status.OK).json({ message: 'Objet supprimé !' });
+      return res.status(status.OK).json({ message: 'commentaire supprimé !' });
     } catch (error) {
       return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
     }

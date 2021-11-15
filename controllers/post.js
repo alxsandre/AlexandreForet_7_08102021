@@ -61,83 +61,12 @@ exports.getAllPosts = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    /*
     await models.post.destroy({
       where: {
         id: req.params.id,
-      },
-      include: {
-        model: models.comment
       }
     });
-    
-    return res.status(status.OK).json({ message: 'post et ses commentaires supprimés !' });
-    */
-
-    const comment = await models.comment.findOne({
-      where: {
-        post_id: req.params.id,
-      }
-    });
-    const post = await models.comment.findOne({
-      where: {
-        id: req.params.id,
-      }
-    });
-    if (comment) {
-      await models.comment.destroy({
-        where: {
-          post_id: req.params.id,
-        }
-      });
-      await models.post.destroy({
-        where: {
-          id: req.params.id,
-        }
-      });
-      return res.status(status.OK).json({ message: 'post et ses commentaires supprimés !' });
-    } else if (post) {
-      await models.post.destroy({
-        where: {
-          id: req.params.id,
-        }
-      });
-      return res.status(status.OK).json({ message: 'post supprimé!' });
-    } else {
-      return res.status(status.OK).json({ message: 'post déjà supprimé!' });
-    }
-
-
-    /*
-    db.post.hasMany(db.comment);
-    db.comment.belongsTo(db.post);
-    const post = await db.post.findAll({
-      where: {
-        id: req.params.id,
-      },
-      include: {
-        model: db.comment,
-        where: {
-          post_id: req.params.id
-        }
-      },
-      raw: true,
-      nest: true
-    });
-    */
-    /*
-    if (post.comments) {
-      const comments = await db.comment.findAll({
-        where: {
-          post_id: req.params.id,
-        }
-      });
-      return res.status(status.OK).json(comments);
-    }
-    */
-    //await post.destroy();
-    //return res.status(status.OK).json({ message: 'Objet supprimé !' });
-    //return res.status(status.OK).json(post);
+    return res.status(status.OK).json({ message: 'post (ses commentaires et likes si il y a) supprimé !' });
   } catch (error) {
     return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
   }
