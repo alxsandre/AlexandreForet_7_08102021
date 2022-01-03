@@ -53,3 +53,23 @@ exports.login = async (req, res) => {
         return res.status(status.BAD_REQUEST).json({ error })
     }
 };
+
+
+exports.modifyLogin = async (req, res) => {
+    try {
+        const user = await models.employee.findOne({
+          where: {
+            id: req.params.id
+          }
+        });
+        if (req.body.email) user.email = req.body.email;
+        if (req.body.password) {
+            const hashPassword = await bcrypt.hash(req.body.password, 10);
+            user.password = hashPassword;
+        } 
+        await user.save();
+        return res.status(status.OK).json({ message: 'Objet modifié!'})
+    } catch (error) {
+        return res.status(status.NOT_FOUND).json({ error });
+    };
+};
