@@ -57,6 +57,16 @@ exports.login = async (req, res) => {
 
 exports.modifyLogin = async (req, res) => {
     try {
+        if (req.body.email) {
+            const email = await models.employee.findOne({
+                where: {
+                  email: req.body.email
+                }
+              });
+            if (email) {
+                return res.status(status.UNAUTHORIZED).json({ error: 'email déjà utilisée!'});
+            }
+        }
         const user = await models.employee.findOne({
           where: {
             id: req.params.id
