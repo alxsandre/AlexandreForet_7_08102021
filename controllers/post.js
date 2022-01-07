@@ -51,6 +51,9 @@ exports.getAllPosts = async (req, res) => {
         attributes: ['last_name', 'first_name', 'photo']
       }, {
         model: models.like
+      }, {
+        model: models.comment,
+        attributes: ['id']
       }]
     });
     return res.status(status.OK).json(posts);
