@@ -43,6 +43,7 @@ exports.login = async (req, res) => {
         } 
         return res.status(status.OK).json({
             userId: user.id,
+            adminer: user.adminer,
             token: jwt.sign(
                 { userId: user.id },
                 process.env.TOKEN,
@@ -64,7 +65,7 @@ exports.modifyLogin = async (req, res) => {
                 }
               });
             if (email) {
-                return res.status(status.UNAUTHORIZED).json({ error: 'email déjà utilisée!'});
+                return res.status(status.UNAUTHORIZED).json({ error: 'identifiant non disponible!'});
             }
         }
         const user = await models.employee.findOne({

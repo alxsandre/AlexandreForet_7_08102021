@@ -37,6 +37,10 @@ class employee extends Sequelize.Model {
     photo: {
       type: DataTypes.STRING(255),
       allowNull: false
+    },
+    adminer: {
+      type: DataTypes.TINYINT,
+      allowNull: true
     }
   }, {
     sequelize,

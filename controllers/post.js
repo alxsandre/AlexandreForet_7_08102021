@@ -69,7 +69,7 @@ exports.deletePost = async (req, res) => {
         id: req.params.id,
       }
     });
-    return res.status(status.OK).json({ message: 'post (ses commentaires et likes si il y a) supprimé !' });
+    return res.status(status.OK).json({ message: 'post supprimé!' });
   } catch (error) {
     return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
   }
