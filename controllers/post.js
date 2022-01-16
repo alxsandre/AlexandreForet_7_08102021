@@ -22,9 +22,14 @@ exports.modifyPost = async (req, res) => {
         id: req.params.id
       }
     });
-    post.content = req.body.content;
-    await post.save();
-    return res.status(status.OK).json({ message: 'Objet modifié!'})
+    const postToManipulate = post.get({ plain: true });
+    if (req.userId === postToManipulate.employee_id) {
+      post.content = req.body.content;
+      await post.save();
+      return res.status(status.OK).json({ message: 'Objet modifié!'})
+    } else {
+        throw 'pas authorisé pour cet utilisateur!'; 
+    }
   } catch (error) {
     return res.status(status.NOT_FOUND).json({ error });
   };
@@ -64,12 +69,18 @@ exports.getAllPosts = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    await models.post.destroy({
+    const post = await models.post.findOne({
       where: {
-        id: req.params.id,
+        id: req.params.id
       }
     });
-    return res.status(status.OK).json({ message: 'post supprimé!' });
+    const postToManipulate = post.get({ plain: true });
+    if (req.userId === postToManipulate.employee_id || req.userAdminer) {
+      await post.destroy();
+      return res.status(status.OK).json({ message: 'post supprimé!' });
+    } else {
+        throw 'pas authorisé pour cet utilisateur!'; 
+    }
   } catch (error) {
     return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
   }

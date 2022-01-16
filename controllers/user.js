@@ -84,3 +84,16 @@ exports.modifyLogin = async (req, res) => {
         return res.status(status.NOT_FOUND).json({ error });
     };
 };
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await models.employee.destroy({
+            where: {
+                id: req.params.id,
+            }
+        });
+        return res.status(status.OK).json({ message: 'profil supprimé!' });
+    } catch (error) {
+        return res.status(status.INTERNAL_SERVER_ERROR).json({ error })
+    }
+};

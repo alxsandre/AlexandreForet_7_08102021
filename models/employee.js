@@ -2,9 +2,9 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   const Employee = employee.init(sequelize, DataTypes);
   Employee.associate = models => {
-    Employee.hasMany(models.comment, { foreignKey: "employee_id"});
-    Employee.hasMany(models.like, { foreignKey: "employee_id"});
-    Employee.hasMany(models.post, { foreignKey: "employee_id"});
+    Employee.hasMany(models.comment, { foreignKey: "employee_id", onDelete: "CASCADE"});
+    Employee.hasMany(models.like, { foreignKey: "employee_id", onDelete: "CASCADE"});
+    Employee.hasMany(models.post, { foreignKey: "employee_id", onDelete: "CASCADE"});
   }
   return Employee
 }
