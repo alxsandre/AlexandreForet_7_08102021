@@ -21,4 +21,4 @@ npm i && npm run dev
 
 ## Import .env and config.js files at the root of the project (available in the folder sent)
 
-## [Front-end](https://github.com/OpenClassrooms-Student-Center/dwj-projet6)
+## [Front-end](https://github.com/alxsandre/AlexandreForet_7_05112021_FRONT)
