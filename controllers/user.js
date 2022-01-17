@@ -6,7 +6,7 @@ const { models, db } = require('../models/index');
 
 exports.signup = async (req, res) => {
     try {
-        if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(req.body.password)) {
+        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(req.body.password)) {
             return res.status(status.UNAUTHORIZED).json({ error: 'password not secure'});
         }
         const email = await models.employee.findOne({
