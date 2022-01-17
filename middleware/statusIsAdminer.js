@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
             }
         });
         const userToManipulate = user.get({ plain: true });
-        req.userAdminer = userToManipulate.adminer;
+        req.userIsAdminer = userToManipulate.is_adminer;
         next();
     } catch (error) {
         res.status(status.UNAUTHORIZED).json({ error: error || 'Requête non authentifiée' })

@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
         } 
         return res.status(status.OK).json({
             userId: user.id,
-            adminer: user.adminer,
+            isAdminer: user.is_adminer,
             token: jwt.sign(
                 { userId: user.id },
                 process.env.TOKEN,

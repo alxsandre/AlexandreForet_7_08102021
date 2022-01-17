@@ -38,7 +38,7 @@ class employee extends Sequelize.Model {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    adminer: {
+    is_adminer: {
       type: DataTypes.TINYINT,
       allowNull: true
     }

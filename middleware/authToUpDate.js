@@ -3,7 +3,7 @@ const { models } = require('../models/index');
 
 module.exports = async (req, res, next) => {
     try {
-        const userToUpDate = parseInt(req.params.id);
+        const userToUpDate = Number(req.params.id);
         if (req.userId === userToUpDate) {
             next();
         } else {

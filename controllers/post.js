@@ -75,7 +75,7 @@ exports.deletePost = async (req, res) => {
       }
     });
     const postToManipulate = post.get({ plain: true });
-    if (req.userId === postToManipulate.employee_id || req.userAdminer) {
+    if (req.userId === postToManipulate.employee_id || req.userIsAdminer) {
       await post.destroy();
       return res.status(status.OK).json({ message: 'post supprimé!' });
     } else {

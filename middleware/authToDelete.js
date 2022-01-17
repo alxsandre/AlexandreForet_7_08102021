@@ -9,8 +9,8 @@ module.exports = async (req, res, next) => {
             }
         });
         const userToManipulate = user.get({ plain: true });
-        const userToDelete = parseInt(req.params.id);
-        if (req.userId === userToDelete || userToManipulate.adminer) {
+        const userToDelete = Number(req.params.id);
+        if (req.userId === userToDelete || userToManipulate.is_adminer) {
             next();
         } else {
             throw 'pas authorisé pour cet utilisateur!'; 
