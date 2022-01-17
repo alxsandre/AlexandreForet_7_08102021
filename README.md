@@ -6,12 +6,12 @@
 
 ## Command to clone the client project:
 ```shell
-git clone https://github.com/alxsandre/AlexandreForet_7_08102021.git
+git clone https://github.com/alxsandre/AlexandreForet_7_08102021_BACK.git
 ```
 
 ## Go inside the project
 ```shell
-cd AlexandreForet_7_08102021
+cd AlexandreForet_7_08102021_BACK
 ```
 
 ## Install Dependencies and Run the Server
