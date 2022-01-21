@@ -78,6 +78,9 @@ exports.modifyLogin = async (req, res) => {
         });
         if (req.body.email) user.email = req.body.email;
         if (req.body.password) {
+            if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(req.body.password)) {
+                return res.status(status.UNAUTHORIZED).json({ error: 'password not secure'});
+            }
             const hashPassword = await bcrypt.hash(req.body.password, 10);
             user.password = hashPassword;
         } 
