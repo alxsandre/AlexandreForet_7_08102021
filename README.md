@@ -14,11 +14,11 @@ git clone https://github.com/alxsandre/AlexandreForet_7_08102021_BACK.git
 cd AlexandreForet_7_08102021_BACK
 ```
 
+## Import .env file at the root of the project (available in the folder sent)
+
 ## Install Dependencies and Run the Server
 ```shell
-npm i && npm run dev
+npm i && npm run start
 ```
-
-## Import .env and config.js files at the root of the project (available in the folder sent)
 
 ## [Front-end](https://github.com/alxsandre/AlexandreForet_7_05112021_FRONT)
